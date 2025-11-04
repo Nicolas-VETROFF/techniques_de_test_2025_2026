@@ -22,7 +22,7 @@
 - ...
 
 #### PointSet
-- [ ] Garde en mémoire le bon nombre de points et les bonnes coordonées de chacun d'entre eux
+- [ ] Garde en mémoire le bon nombre de points et les bonnes coordonnées de chacun d'entre eux
 - [ ] Convertie correctement l'ensemble des points en binaire (nombre point + coordonnées de tous les points)
 - [ ] Robustesse (binaire corrompu ou tronqué)
 - ...

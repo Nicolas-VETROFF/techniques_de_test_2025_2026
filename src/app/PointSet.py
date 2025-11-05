@@ -1,16 +1,15 @@
+from app.Point import Point
+
 class PointSet:
-    binary: bool
+    binary: str
 
     # list[Point] plutot ?
-    def __init__(self, nbPoints: int, pointList: list[list[int]]):
+    def __init__(self):
         raise NotImplementedError
         
     # list[Point] plutot ?
-    def encode(self, nbPoints: int, pointList: list[list[int]]) -> None:
+    def encode(self, nbPoints: int, pointList: list[Point]) -> None:
         raise NotImplementedError
-    
-    def decode(self) -> None: # return better type
-        raise NotImplementedError
-    
+
     def getBinary(self) -> str:
         raise NotImplementedError

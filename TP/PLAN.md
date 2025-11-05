@@ -28,10 +28,10 @@
 - ...
 
 #### PointSet
-- [ ] Garde en mémoire le bon nombre de points et les bonnes coordonnées de chacun d'entre eux
+- [x] Garde en mémoire le bon nombre de points et les bonnes coordonnées de chacun d'entre eux
   - Après création d'un pointSet, on vérifie si on peut récupérer le binaire sauvegardé
-- [ ] Convertie correctement l'ensemble des points en binaire 
-  - Binaire correct contenant les points et le nombre de points
+- [x] Convertie correctement l'ensemble des 3 points en binaire 
+  - Binaire correct pour les coordonnées de points et leur nombre fourni en entrée (3 points)
 - ...
 
 #### PointSetManager

@@ -1,4 +1,5 @@
-import pytest
-
 class TestApi:
-    pass
+    def test_pointSet_endpoint(self):
+        pass
+
+    def test_pointS

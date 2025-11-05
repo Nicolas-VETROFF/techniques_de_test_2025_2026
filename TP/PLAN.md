@@ -66,11 +66,13 @@
 Tester du PointSet envoyé par le client au Triangles finaux envoyés par Triangulator
 
 ## Tests de performance
-INFO : Ces tests sont lancer à part à cause du temps que ces tests peuvent prendre
+INFO : Ces tests sont lancer à part, à cause du temps qu'ils peuvent prendre.
 - [ ] Rapidité du système pour trianguler (algorithme)
 - [ ] Rapidité du système à générer le binaire du PointSet
 - [ ] Rapidité du système à générer le binaire de Triangulator
 
 ## Tests de qualité et documentation
 - [ ] Vérification de la qualité du code
+  - Couverture de tests
+  - ...
 - [ ] Documentation complète

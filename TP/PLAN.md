@@ -14,24 +14,33 @@
 
 #### Triangulator
 - [ ] Donne les bons Triangles (3 points / carré de points / 2 points / 3 points colinéaires)
-- [ ] Donne le bon nombre de triangles
-- [ ] Convertie correctement la triangulation en binaire
-- [ ] Décode correctement le binaire (récupération des coordonées initiales)
-- [ ] Convertion + Reconvertion (non-binaire -> binaire -> non-binaire) : On doit retrouver les mêmes valeurs
-- [ ] Robustesse (binaire corrompu ou tronqué)
+  - Permet de savoir si la triangulation fonctionne correctement
+- [ ] Donne le bon nombre de triangles (3 points / carré de points / 2 points / 3 points colinéaires)
+  - Permet de savoir si l'algorithme calcule correctement les triangles possibles : (1, 2, 0, 0)
+- [ ] Convertie correctement la triangulation en binaire (3 points)
+  - Binaire correct contenant les points, le nombre de points et les triangles
+- [ ] Décode correctement le binaire (3 points en binaire)
+  - Récupération de chaque point ET du nombre de points
+- [ ] Est idempotent (conversion + reconversion) : On doit retrouver les mêmes valeurs
+- [ ] Robustesse 
+  - Erreur si le PointSetID ne correspond à aucun PointSet
+  - Erreur si le PointSet récupéré est mal formé (tronqué / corrompu)
 - ...
 
 #### PointSet
 - [ ] Garde en mémoire le bon nombre de points et les bonnes coordonnées de chacun d'entre eux
-- [ ] Convertie correctement l'ensemble des points en binaire (nombre point + coordonnées de tous les points)
-- [ ] Robustesse (binaire corrompu ou tronqué)
+  - Après création d'un pointSet, on vérifie si on peut récupérer le binaire sauvegardé
+- [ ] Convertie correctement l'ensemble des points en binaire 
+  - Binaire correct contenant les points et le nombre de points
 - ...
 
 #### PointSetManager
 - [ ] Retourne le bon PointSetID du PointSet nouvellement enregistré
 - [ ] Charge le bon PointSet en fonction du PointSetID
-- [ ] Cas ID inconnu : doit renvoyer une erreur 404
-- [ ] Cas bdd inaccessible : doit renvoyer une erreur 500
+- [ ] Cas ID inconnu
+  - Doit renvoyer une erreur gérée par le programme (404)
+- [ ] Cas bdd inaccessible
+  - Doit renvoyer une erreur gérée par le programme (500)
 - ...
 
 ### Client

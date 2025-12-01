@@ -5,26 +5,26 @@ class Triangulation:
     binary: str
 
     def __init__(self):
-        raise NotImplementedError
+        pass
         
-    def encode(self, pointSetBinary: str) -> None:
-        raise NotImplementedError
+    def encode(self, pointSetBinary: str):
+        pass
     
-    def decode(self) -> object:
-        raise NotImplementedError
+    def decode(self):
+        pass
     
-    def decodeNbTriangle(self) -> int:
-        raise NotImplementedError
+    def decodeNbTriangle(self):
+        pass
     
-    def decodePointCoordinates(self) -> object:
-        raise NotImplementedError
+    def decodePointCoordinates(self):
+        pass
     
-    def triangulation(self, pointSetID: int) -> None:
-        raise NotImplementedError
+    def triangulation(self, pointSetID: int) -> str:
+        return ''
     
-    def getBinary(self) -> str:
-        raise NotImplementedError
+    def getBinary(self):
+        pass
     
     # Call API
-    def getPointsBinary(self) -> str:
-        raise NotImplementedError
+    def getPointsBinary(self):
+        pass

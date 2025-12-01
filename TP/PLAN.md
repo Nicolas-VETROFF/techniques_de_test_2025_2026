@@ -13,16 +13,16 @@
 - ...
 
 #### Triangulator
-- [ ] Donne les bons Triangles (3 points / carré de points / 2 points / 3 points colinéaires)
+- [x] Donne les bons Triangles (3 points / carré de points / 2 points / 3 points colinéaires)
   - Permet de savoir si la triangulation fonctionne correctement
-- [ ] Donne le bon nombre de triangles (3 points / carré de points / 2 points / 3 points colinéaires)
+- [x] Donne le bon nombre de triangles (3 points / carré de points / 2 points / 3 points colinéaires)
   - Permet de savoir si l'algorithme calcule correctement les triangles possibles : (1, 2, 0, 0)
-- [ ] Convertie correctement la triangulation en binaire (3 points)
+- [x] Convertie correctement la triangulation en binaire (3 points)
   - Binaire correct contenant les points, le nombre de points et les triangles
-- [ ] Décode correctement le binaire (3 points en binaire)
+- [x] Décode correctement le binaire (3 points en binaire)
   - Récupération de chaque point ET du nombre de points
-- [ ] Est idempotent (conversion + reconversion) : On doit retrouver les mêmes valeurs
-- [ ] Robustesse 
+- [x] Est idempotent (conversion + reconversion) : On doit retrouver les mêmes valeurs
+- [x] Robustesse 
   - Erreur si le PointSetID ne correspond à aucun PointSet
   - Erreur si le PointSet récupéré est mal formé (tronqué / corrompu)
 - ...
@@ -35,11 +35,11 @@
 - ...
 
 #### PointSetManager
-- [ ] Retourne le bon PointSetID du PointSet nouvellement enregistré
-- [ ] Charge le bon PointSet en fonction du PointSetID
-- [ ] Cas ID inconnu
+- [x] Retourne le bon PointSetID du PointSet nouvellement enregistré
+- [x] Charge le bon PointSet en fonction du PointSetID
+- [x] Cas ID inconnu
   - Doit renvoyer une erreur gérée par le programme (404)
-- [ ] Cas bdd inaccessible
+- [x] Cas bdd inaccessible
   - Doit renvoyer une erreur gérée par le programme (500)
 - ...
 

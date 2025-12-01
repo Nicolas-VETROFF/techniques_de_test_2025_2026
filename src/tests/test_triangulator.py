@@ -1,66 +1,169 @@
-from app.Triangulation import Triangulation
+import pytest
 from unittest.mock import MagicMock
+from app.Triangulation import Triangulation
+from bitstring import BitArray
 
 class TestTriangulator:
 
-    def test_triangulation_func_call(self):
+    Zero = 0
+    One = 1
+    Two = 2
+    Three = 3
+    Four = 4
+
+    def test_triangulation_calls_encode_and_get_points(self):
         binary = ""
-        "00000000000000000000000000000011" # nbPoints
-        "00111111000000000000000000000000" # x1
-        "00000000000000000000000000000000" # y1
-        "00111111100000000000000000000000" # x2
-        "00000000000000000000000000000000" # y2
-        "00000000000000000000000000000000" # x3
-        "00111111100000000000000000000000" # y3
+        BitArray(uint=3, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
 
-        triangulation = Triangulation()
-        triangulation.encode = MagicMock()
-        triangulation.getPointsBinary = MagicMock() # Mock API Call
-        triangulation.getPointsBinary.return_value = binary
+        triang = Triangulation()
+        triang.encode = MagicMock()
+        triang.getPointsBinary = MagicMock(return_value=binary)
 
-        triangulation.triangulation(1)
+        triang.triangulation(1)
 
-        # Testing if func called when correct binary
-        assert triangulation.encode.assert_called_once()
-        assert triangulation.getPointsBinary.assert_called_once()
+        triang.getPointsBinary.assert_called_once()
+        triang.encode.assert_called_once()
 
-    # Ex: Only 2 points
-    def test_triangulation_with_not_enough_points(self):
+    def test_triangulation_not_enough_points(self):
         binary = ""
-        "00000000000000000000000000000010" # nbPoints
-        "00111111000000000000000000000000" # x1
-        "00000000000000000000000000000000" # y1
-        "00111111100000000000000000000000" # x2
-        "00000000000000000000000000000000" # y2
+        BitArray(uint=2, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=1, length=32).bin
 
-        triangulation = Triangulation()
-        triangulation.encode = MagicMock()
-        triangulation.getPointsBinary = MagicMock() # Mock API Call
-        triangulation.getPointsBinary.return_value = binary
+        triang = Triangulation()
+        triang.encode = MagicMock()
+        triang.getPointsBinary = MagicMock(return_value=binary)
 
-        triangulation.triangulation(1)
+        result = triang.triangulation(1)
 
-        # Testing if correct binary
-        assert triangulation.encode.assert_not_called()
-    
-    # Ex: 3 points but 4 coordinates
-    def test_triangulation_with_wrong_nb_of_points(self):
-        pass
+        # encode() ne doit PAS être appelé
+        triang.encode.assert_not_called()
+        assert result is None
 
-    def test_idempotence(self) -> None:
-        binary: str = ""
-        "00000000000000000000000000000011" # nbPoints
-        "00111111000000000000000000000000" # x1
-        "00000000000000000000000000000000" # y1
-        "00111111100000000000000000000000" # x2
-        "00000000000000000000000000000000" # y2
-        "00000000000000000000000000000000" # x3
-        "00111111100000000000000000000000" # y3
+    def test_triangulation_wrong_number_of_points(self):
+        binary = ""
+        BitArray(uint=4, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
 
-        triangulation = Triangulation()
-        triangulation.encode(binary)
-        # varTest = triangulation.decode()
-        
-        assert False
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=binary)
 
-        
+        with pytest.raises(Exception):
+            triang.triangulation(1)
+
+    def test_idempotence(self):
+        binary = ""
+        BitArray(uint=3, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=binary)
+
+        triang.encode(binary)
+        result = triang.decode()
+
+        assert result == binary
+
+    def test_good_triangle_for_3_points(self):
+        binary = ""
+        BitArray(uint=3, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=2, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=2, length=32).bin
+
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=binary)
+
+        result = triang.triangulation(1)
+
+        assert result.startswith(binary)
+
+        nb_triangles = int(result[len(binary):len(binary)+32], 2)
+        assert nb_triangles == 1
+
+        triangles_bin = result[len(binary)+32:]
+        assert len(triangles_bin) == 96
+
+    def test_colinear_points_give_zero_triangles(self):
+        # Trois points alignés
+        binary = ""
+        BitArray(uint=3, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=2, length=32).bin
+        BitArray(uint=0, length=32).bin
+
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=binary)
+
+        result = triang.triangulation(1)
+
+        assert result.startswith(binary)
+
+        nb_triangles = int(result[len(binary):len(binary)+32], 2)
+        assert nb_triangles == 0
+
+    def test_square_has_two_triangles(self):
+
+        binary = ""
+        BitArray(uint=4, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=0, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=1, length=32).bin
+        BitArray(uint=1, length=32).bin
+
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=binary)
+
+        result = triang.triangulation(1)
+
+        assert result.startswith(binary)
+
+        nb_tri = int(result[len(binary):len(binary)+32], 2)
+        assert nb_tri == 2
+
+        triangles_data = result[len(binary)+32:]
+        assert len(triangles_data) == 2 * 96
+
+    def test_unknown_pointset_should_raise(self):
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=None)
+
+        with pytest.raises(Exception):
+            triang.triangulation(1)
+
+    def test_corrupted_binary_should_raise(self):
+        binary = BitArray(uint=1, length=32).bin + "01" # tronqué
+
+        triang = Triangulation()
+        triang.getPointsBinary = MagicMock(return_value=binary)
+
+        with pytest.raises(Exception):
+            triang.triangulation(1)

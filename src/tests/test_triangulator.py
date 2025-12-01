@@ -6,14 +6,14 @@ from bitstring import BitArray
 class TestTriangulator:
 
     def test_triangulation_calls_encode_and_get_points(self):
-        binary = ""
-        BitArray(uint=3, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
+        binary = ("" +
+        BitArray(uint=3, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin)
 
         triang = Triangulation()
         triang.encode = MagicMock()
@@ -25,12 +25,12 @@ class TestTriangulator:
         triang.encode.assert_called_once()
 
     def test_triangulation_not_enough_points(self):
-        binary = ""
-        BitArray(uint=2, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=1, length=32).bin
+        binary = ("" +
+        BitArray(uint=2, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=1, length=32).bin)
 
         triang = Triangulation()
         triang.encode = MagicMock()
@@ -43,14 +43,14 @@ class TestTriangulator:
         assert result is None
 
     def test_triangulation_wrong_number_of_points(self):
-        binary = ""
-        BitArray(uint=4, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
+        binary = ("" +
+        BitArray(uint=4, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin)
 
         triang = Triangulation()
         triang.getPointsBinary = MagicMock(return_value=binary)
@@ -59,14 +59,14 @@ class TestTriangulator:
             triang.triangulation(1)
 
     def test_idempotence(self):
-        binary = ""
-        BitArray(uint=3, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
+        binary = ("" +
+        BitArray(uint=3, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin)
 
         triang = Triangulation()
         triang.getPointsBinary = MagicMock(return_value=binary)
@@ -77,14 +77,14 @@ class TestTriangulator:
         assert result == binary
 
     def test_good_triangle_for_3_points(self):
-        binary = ""
-        BitArray(uint=3, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=2, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=2, length=32).bin
+        binary = ("" +
+        BitArray(uint=3, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=2, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=2, length=32).bin)
 
         triang = Triangulation()
         triang.getPointsBinary = MagicMock(return_value=binary)
@@ -101,14 +101,14 @@ class TestTriangulator:
 
     def test_colinear_points_give_zero_triangles(self):
         # Trois points alignés
-        binary = ""
-        BitArray(uint=3, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=2, length=32).bin
-        BitArray(uint=0, length=32).bin
+        binary = ("" +
+        BitArray(uint=3, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=2, length=32).bin +
+        BitArray(uint=0, length=32).bin)
 
         triang = Triangulation()
         triang.getPointsBinary = MagicMock(return_value=binary)
@@ -122,16 +122,16 @@ class TestTriangulator:
 
     def test_square_has_two_triangles(self):
 
-        binary = ""
-        BitArray(uint=4, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=0, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=1, length=32).bin
-        BitArray(uint=1, length=32).bin
+        binary = ("" +
+        BitArray(uint=4, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=0, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=1, length=32).bin +
+        BitArray(uint=1, length=32).bin)
 
         triang = Triangulation()
         triang.getPointsBinary = MagicMock(return_value=binary)

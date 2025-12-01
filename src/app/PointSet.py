@@ -11,5 +11,5 @@ class PointSet:
     def encode(self, nbPoints: int|None = None, pointList: list[(Point)]|None = None) -> str:
         return ''
 
-    def getBinary(self) -> str:
-        return ''
+    def getBinary(self) -> str|None:
+        return None

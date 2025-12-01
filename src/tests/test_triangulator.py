@@ -5,12 +5,6 @@ from bitstring import BitArray
 
 class TestTriangulator:
 
-    Zero = 0
-    One = 1
-    Two = 2
-    Three = 3
-    Four = 4
-
     def test_triangulation_calls_encode_and_get_points(self):
         binary = ""
         BitArray(uint=3, length=32).bin

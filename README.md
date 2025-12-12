@@ -9,3 +9,16 @@ Prénom : Nicolas
 Groupe de TP : M1 ILSEN alternance  
 
 ## Remarques particulières
+
+Pour lancer l'environnement python :
+- Se mettre à la racine du projet
+- `source env/bin/activate`
+
+Pour utiliser l'application :
+- Se mettre à la racine du projet
+- `export FLASK_APP=src/app/app.py` (Linux) ou `set FLASK_APP=src/app/app.py` (Windows)
+- `flask run`
+
+Pour lancer les tests :
+- Se mettre à la racine du projet
+- `pytest -v`

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- ADD NEW POINTSET -->
+    <div>
+        <input type="number" placeholder="3" id="nb" />
+        <input type="text" placeholder="[0,0,1,0,0,1]" id="list">
+        <button id="addBtn">Ajouter</button>
+    </div>
+
+    <!-- GET BINARY -->
+    <div>
+        <input type="number" placeholder="0" id="id" />
+        <button id="getBtn">Voir</button>
+    </div>
+
+    <!-- TRIANGULATION -->
+    <div>
+        <input type="number" placeholder="0" id="triangId" />
+        <button id="triangBtn">Trianguler</button>
+    </div>
+
+    <p id="messages"></p>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $('#addBtn').click((event) => {
+            sendAPIRequest(JSON.stringify({
+                'nb': $('#nb').val(),
+                'list': $('#list').val()
+            }))
+        })
+        
+        $('#getBtn').click((event) => {
+            getBinaryData($('#id').val())
+        })
+        
+        $('#triangBtn').click((event) => {
+            triangulatePointSet($('#triangId').val())
+        })
+        function sendAPIRequest(json) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/manager/add',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: json,
+                success: function (result, status, xhr) {
+                    $('#messages').text(result['message'] + " - id: " + result['id'])
+                },
+                error: function(xhr, status, error) {
+                    alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                }
+            })
+        }
+        
+        function getBinaryData(id) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/manager/readable/' + id,
+                dataType: 'json',
+                success: function (result, status, xhr) {
+                    if (result['data']) {
+                        const data = result['data'];
+                        $('#messages').text(result['message'] + " - nbPoints: " + data['nbPoints'] + ", points: " + JSON.stringify(data['points']))
+                    } else {
+                        $('#messages').text(result['message'])
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                }
+            })
+        }
+        
+        function triangulatePointSet(id) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/triangulate/' + id,
+                dataType: 'json',
+                success: function (result, status, xhr) {
+                    if (result['result']) {
+                        const data = result['result'];
+                        let message = result['message'] + " - nbPoints: " + data['nbPoints'] + 
+                                     ", points: " + JSON.stringify(data['points']) +
+                                     ", nbTriangles: " + data['nbTriangles'];
+                        if (data['nbTriangles'] > 0) {
+                            message += ", triangles: " + JSON.stringify(data['triangles']);
+                        }
+                        $('#messages').text(message)
+                    } else {
+                        $('#messages').text(result['message'])
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                }
+            })
+        }
+        
+    </script>
+</body>
+</html>

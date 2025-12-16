@@ -10,6 +10,8 @@ Groupe de TP : M1 ILSEN alternance
 
 ## Remarques particulières
 
+Vous avez besoin de toutes les dépendances pour utiliser le Makefile et faire fonctionner l'application (Flask, Pytest, Coverage, Pdoc3, ...).
+
 Pour lancer l'environnement python :
 - Se mettre à la racine du projet
 - `source env/bin/activate`

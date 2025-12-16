@@ -16,7 +16,6 @@ class PointSet:
         return self.binary
     
     def decode(self) -> dict:
-        """Decode binary to readable format"""
         if self.binary is None or len(self.binary) < 32:
             return {}
         
@@ -41,7 +40,6 @@ class PointSet:
         }
     
     def decode_triangulation(self, binary_with_triangulation: str) -> dict:
-        """Decode binary with triangulation data to readable format"""
         if len(binary_with_triangulation) < 32:
             return {}
         

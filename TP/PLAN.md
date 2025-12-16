@@ -8,8 +8,8 @@
 ## Tests unitaires
 
 ### API
-- [ ] Renvoie pour chaque route les bonnes informations en JSON (bonnes clés, bons types, ...)
-- [ ] Renvoie les bons code HTTP (200, 400, 500)
+- [x] Renvoie pour chaque route les bonnes informations en JSON (bonnes clés, bons types, ...)
+- [x] Renvoie les bons code HTTP (200, 400, 500)
 - ...
 
 #### Triangulator
@@ -51,12 +51,12 @@
 ### API
 
 #### Triangulator
-- [ ] Reçoit le bon PointSet du PointSetManager
+- [x] Reçoit le bon PointSet du PointSetManager
 - ...
 
 ### Client
 - [ ] Reçoit le bon PointSetID du PointSetManager
-- [ ] Reçoit les bones Triangles du Triangulator
+- [ ] Reçoit les bons Triangles du Triangulator
 - ...
 
 ...
@@ -67,9 +67,9 @@ Tester du PointSet envoyé par le client au Triangles finaux envoyés par Triang
 
 ## Tests de performance
 INFO : Ces tests sont lancer à part, à cause du temps qu'ils peuvent prendre.
-- [ ] Rapidité du système pour trianguler (algorithme)
-- [ ] Rapidité du système à générer le binaire du PointSet
-- [ ] Rapidité du système à générer le binaire de Triangulator
+- [x] Rapidité du système pour trianguler (algorithme)
+- [x] Rapidité du système à générer le binaire du PointSet
+- [x] Rapidité du système à générer le binaire de Triangulator
 
 ## Tests de qualité et documentation
 - [ ] Vérification de la qualité du code

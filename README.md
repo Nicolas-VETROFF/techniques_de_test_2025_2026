@@ -13,3 +13,7 @@ Groupe de TP : M1 ILSEN alternance
 Pour lancer l'environnement python :
 - Se mettre à la racine du projet
 - `source env/bin/activate`
+
+Pour lancer les tests, l'application, etc... :
+- Se mettre à la racine du projet
+- `make <commande>` (voir [Makefile](./Makefile))

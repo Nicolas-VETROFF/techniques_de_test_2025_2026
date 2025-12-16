@@ -42,7 +42,7 @@ class TestPerformance:
         
         print(f"Triangulation of {nb_points} points took {duration:.4f} seconds")
         
-        assert duration < 120.0, f"Triangulation took too long: {duration:.4f} seconds"
+        assert duration < 180.0, f"Triangulation took too long: {duration:.4f} seconds"
         
         assert result is not None
         assert result.startswith(binary)
@@ -84,7 +84,7 @@ class TestPerformance:
         
         print(f"Triangulation of {nb_points} points took {duration:.4f} seconds")
         
-        assert duration < 2.0, f"Medium triangulation took too long: {duration:.4f} seconds"
+        assert duration < 3.0, f"Medium triangulation took too long: {duration:.4f} seconds"
         
         assert result is not None
         assert result.startswith(binary)

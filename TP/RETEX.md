@@ -1,4 +1,4 @@
-# Retour sur expérience
+# Retour d'expérience
 
 Lors de ce TP, j’ai d’abord dû me familiariser avec l’environnement Python ainsi qu’avec plusieurs outils associés, notamment Flask, Pytest, Coverage et Pdoc3. La démarche adoptée reposait sur la méthode TDD (Test Driven Development), consistant à concevoir et exécuter des tests avant même l’implémentation de l’application.
 

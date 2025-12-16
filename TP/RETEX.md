@@ -1,8 +1,8 @@
 # Retour d'expérience
 
-Lors de ce TP, j’ai d’abord dû me familiariser avec l’environnement Python ainsi qu’avec plusieurs outils associés, notamment Flask, Pytest, Coverage et Pdoc3. La démarche adoptée reposait sur la méthode TDD (Test Driven Development), consistant à concevoir et exécuter des tests avant même l’implémentation de l’application.
+Lors de ce TP, j’ai d’abord dû me familiariser avec l’environnement Python ainsi qu’avec plusieurs outils comme Flask, Pytest, Coverage et Pdoc3. La démarche adoptée reposait sur la méthode TDD (Test Driven Development), consistant à concevoir les tests avant même l’implémentation de l’application.
 
-L’une des principales difficultés rencontrées concernait la conception des tests sans disposer d’une vision précise de l’implémentation finale. Cet exercice s’est révélé compliqué, car il va à l’encontre de l’approche habituelle qui consiste à coder avant de réfléchir aux tests unitaires. L'approche que nous n'avons cessé d'avoir depuis le début de notre scolarité en informatique (projets, TP, etc...) - du moins, pour ma part. Il était en effet difficile d’anticiper l’ensemble des comportements attendus sans avoir encore développé la logique.
+L’une des principales difficultés que j'ai pu rencontrer concernait la conception des tests sans disposer d’une vision précise de l’implémentation finale. Cet exercice s’est révélé compliqué pour moi, car il va à l’encontre de l’approche habituelle qui consiste à coder avant de réfléchir aux tests unitaires. L'approche que nous n'avons cessé d'avoir depuis le début de notre scolarité en informatique (projets, TP, etc...) - du moins, pour ma part. Il était en effet difficile d’anticiper l’ensemble des comportements attendus sans avoir encore développé la logique et les erreurs à soulever.
 
 Malgré l’application de cette méthode, j’ai constaté que certains cas d’erreur évidents n’avaient pas été pris en compte lors de l’écriture initiale des tests. Ces oublis ont été corrigés par la suite, une fois l’implémentation entamée, ce qui montre que la conception exhaustive des tests dès le départ reste un exercice difficile.
 

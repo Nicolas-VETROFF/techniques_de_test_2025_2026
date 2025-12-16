@@ -1,5 +1,7 @@
 PYTHON_PATH = ./src
 
+# Veuillez lancer l'environnement python avant d'utiliser les commandes (voir README.md)
+
 tests:
 	@PYTHON_PATH=$(PYTHON_PATH) pytest -v
 

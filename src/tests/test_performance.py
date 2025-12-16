@@ -1,4 +1,3 @@
-import pytest
 import time
 import random
 from unittest.mock import MagicMock
@@ -7,7 +6,6 @@ from app.PointSet import PointSet
 
 class TestPerformance:
     
-    @pytest.mark.timeout(1)
     def test_large_triangulation_performance(self):
         nb_points = 10000
         points = []

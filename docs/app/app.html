@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>app.app API documentation</title>
-<meta name="description" content="">
+<meta name="description" content="Flask application for point set triangulation API.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,6 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>app.app</code></h1>
 </header>
 <section id="section-intro">
+<p>Flask application for point set triangulation API.</p>
 </section>
 <section>
 </section>
@@ -54,6 +55,12 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">@app.route(&#39;/api/manager/add&#39;, methods=[&#39;POST&#39;])
 def add_pointset_to_manager():
+    &#34;&#34;&#34;Add a new point set to the manager.
+    
+    Returns:
+        Response: JSON with success message or error
+
+    &#34;&#34;&#34;
     data = request.get_json()
     nbPoints = int(data.get(&#39;nb&#39;)) if data.get(&#39;nb&#39;) is not None else None
     listString = data.get(&#39;list&#39;)
@@ -89,7 +96,12 @@ def add_pointset_to_manager():
         &#39;id&#39;: len(manager.storage) - 1
     })</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Add a new point set to the manager.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Response</code></dt>
+<dd>JSON with success message or error</dd>
+</dl></div>
 </dd>
 <dt id="app.app.get_pointset_from_manager"><code class="name flex">
 <span>def <span class="ident">get_pointset_from_manager</span></span>(<span>id: int)</span>
@@ -100,7 +112,16 @@ def add_pointset_to_manager():
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/api/manager/get/&lt;id&gt;&#39;)
-def get_pointset_from_manager(id: int):    
+def get_pointset_from_manager(id: int):
+    &#34;&#34;&#34;Get a point set by ID.
+    
+    Args:
+        id: Point set identifier
+        
+    Returns:
+        Response: JSON with point set data or error message
+
+    &#34;&#34;&#34;    
     try:
         pointSet = manager.get_pointset(int(id))
         if pointSet is None:
@@ -120,7 +141,17 @@ def get_pointset_from_manager(id: int):
             &#39;message&#39;: &#34;Invalid identifier&#34;
         })</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Get a point set by ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>Point set identifier</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Response</code></dt>
+<dd>JSON with point set data or error message</dd>
+</dl></div>
 </dd>
 <dt id="app.app.get_pointset_readable"><code class="name flex">
 <span>def <span class="ident">get_pointset_readable</span></span>(<span>id: int)</span>
@@ -131,7 +162,16 @@ def get_pointset_from_manager(id: int):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/api/manager/readable/&lt;id&gt;&#39;)
-def get_pointset_readable(id: int):    
+def get_pointset_readable(id: int):
+    &#34;&#34;&#34;Get a point set in readable format by ID.
+    
+    Args:
+        id: Point set identifier
+        
+    Returns:
+        Response: JSON with readable point set data or error message
+
+    &#34;&#34;&#34;    
     try:
         binary = manager.get(int(id))
         if binary is None:
@@ -152,7 +192,17 @@ def get_pointset_readable(id: int):
             &#39;message&#39;: &#34;Invalid identifier&#34;
         })</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Get a point set in readable format by ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>Point set identifier</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Response</code></dt>
+<dd>JSON with readable point set data or error message</dd>
+</dl></div>
 </dd>
 <dt id="app.app.get_triangulation"><code class="name flex">
 <span>def <span class="ident">get_triangulation</span></span>(<span>id: int)</span>
@@ -163,7 +213,16 @@ def get_pointset_readable(id: int):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/api/triangulate/&lt;id&gt;&#39;)
-def get_triangulation(id: int):    
+def get_triangulation(id: int):
+    &#34;&#34;&#34;Perform triangulation on a point set.
+    
+    Args:
+        id: Point set identifier
+        
+    Returns:
+        Response: JSON with triangulation result or error message
+
+    &#34;&#34;&#34;    
     triang = Triangulation()
     triang.getPointsBinary = lambda point_id: manager.get(int(point_id))
     
@@ -189,7 +248,17 @@ def get_triangulation(id: int):
             &#39;result&#39;: None
         })</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Perform triangulation on a point set.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>Point set identifier</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Response</code></dt>
+<dd>JSON with triangulation result or error message</dd>
+</dl></div>
 </dd>
 <dt id="app.app.hello"><code class="name flex">
 <span>def <span class="ident">hello</span></span>(<span>)</span>
@@ -201,9 +270,20 @@ def get_triangulation(id: int):
 </summary>
 <pre><code class="python">@app.route(&#39;/&#39;)
 def hello():
+    &#34;&#34;&#34;Serve the homepage.
+    
+    Returns:
+        str: Rendered HTML template
+
+    &#34;&#34;&#34;
     return render_template(&#39;index.html&#39;)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Serve the homepage.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Rendered HTML template</dd>
+</dl></div>
 </dd>
 </dl>
 </section>

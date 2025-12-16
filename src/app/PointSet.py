@@ -1,9 +1,24 @@
+"""PointSet module for encoding and decoding point data."""
+
 from bitstring import BitArray
 
+
 class PointSet:
+    """A class to manage point sets with binary encoding and decoding."""
+
     binary: str|None = None
 
     def encode(self, nbPoints: int, pointList: list[int]):
+        """Encode points into binary format.
+        
+        Args:
+            nbPoints: Number of points to encode
+            pointList: List of coordinates [x1, y1, x2, y2, ...]
+            
+        Returns:
+            str: Error message if encoding fails, None otherwise
+
+        """
         if nbPoints * 2 != len(pointList):
             return "Failed to create PointSet : nbPoints != pointList"
         
@@ -13,9 +28,21 @@ class PointSet:
             self.binary += BitArray(uint=point, length=32).bin
 
     def getBinary(self) -> str|None:
+        """Get the binary representation of the point set.
+        
+        Returns:
+            str|None: Binary string or None if not encoded
+
+        """
         return self.binary
     
     def decode(self) -> dict:
+        """Decode binary data back to point coordinates.
+        
+        Returns:
+            dict: Dictionary with 'nbPoints' and 'points' keys
+
+        """
         if self.binary is None or len(self.binary) < 32:
             return {}
         
@@ -40,6 +67,15 @@ class PointSet:
         }
     
     def decode_triangulation(self, binary_with_triangulation: str) -> dict:
+        """Decode binary data including triangulation information.
+        
+        Args:
+            binary_with_triangulation: Binary string containing points and triangles
+            
+        Returns:
+            dict: Dictionary with points and triangulation data
+
+        """
         if len(binary_with_triangulation) < 32:
             return {}
         
@@ -74,14 +110,18 @@ class PointSet:
         # Extract triangulation data if present
         if len(binary_with_triangulation) > point_data_length:
             # Extract number of triangles (next 32 bits)
-            nb_triangles_bits = binary_with_triangulation[point_data_length:point_data_length+32]
+            nb_triangles_bits = binary_with_triangulation[
+                point_data_length:point_data_length+32
+            ]
             nb_triangles = int(nb_triangles_bits, 2)
             
             # Extract triangle indices
             triangles = []
             triangle_data_start = point_data_length + 32
             for i in range(nb_triangles):
-                triangle_start = triangle_data_start + i * 96  # 3 indices * 32 bits each
+                triangle_start = (
+                    triangle_data_start + i * 96  # 3 indices * 32 bits each
+                )
                 p1_bits = binary_with_triangulation[triangle_start:triangle_start+32]
                 p2_bits = binary_with_triangulation[triangle_start+32:triangle_start+64]
                 p3_bits = binary_with_triangulation[triangle_start+64:triangle_start+96]

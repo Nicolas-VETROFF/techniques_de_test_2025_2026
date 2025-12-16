@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>app.Triangulation API documentation</title>
-<meta name="description" content="">
+<meta name="description" content="Triangulation module for Delaunay triangulation of point sets.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,6 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>app.Triangulation</code></h1>
 </header>
 <section id="section-intro">
+<p>Triangulation module for Delaunay triangulation of point sets.</p>
 </section>
 <section>
 </section>
@@ -55,7 +56,19 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Triangulation:
-    def encode(self, pointSetBinary: str, triangulatedPoints: List[List[int]]) -&gt; str:
+    &#34;&#34;&#34;A class to perform Delaunay triangulation on point sets.&#34;&#34;&#34;
+    
+    def encode(self, pointSetBinary: str, triangulatedPoints: list[list[int]]) -&gt; str:
+        &#34;&#34;&#34;Encode triangulation data into binary format.
+        
+        Args:
+            pointSetBinary: Binary representation of points
+            triangulatedPoints: List of triangle point indices
+            
+        Returns:
+            str: Binary string with triangulation data
+
+        &#34;&#34;&#34;
         if not triangulatedPoints:
             return pointSetBinary
         
@@ -69,7 +82,20 @@ el.replaceWith(d);
         
         return pointSetBinary + nb_triangles_bin + triangles_bin
     
-    def triangulation(self, pointSetID: int) -&gt; Optional[str]:
+    def triangulation(self, pointSetID: int) -&gt; str | None:
+        &#34;&#34;&#34;Perform triangulation on a point set.
+        
+        Args:
+            pointSetID: ID of the point set to triangulate
+            
+        Returns:
+            str|None: Binary string with triangulation data or None if insufficient
+                points
+            
+        Raises:
+            Exception: If pointset is unknown or binary is corrupted
+
+        &#34;&#34;&#34;
         binary = self.getPointsBinary(pointSetID)
         
         if binary is None:
@@ -99,10 +125,31 @@ el.replaceWith(d);
         
         return self.encode(binary, triangles)
     
-    def getPointsBinary(self, id: int) -&gt; Optional[str]:
+    def getPointsBinary(self, id: int) -&gt; str | None:
+        &#34;&#34;&#34;Get binary representation of a point set by ID.
+        
+        Args:
+            id: ID of the point set
+            
+        Returns:
+            str|None: Binary representation (empty string by default)
+
+        &#34;&#34;&#34;
         return &#39;&#39;
     
-    def extract_points_from_binary(self, binary: str, nb_points: int) -&gt; List[Tuple[int, int]]:
+    def extract_points_from_binary(
+        self, binary: str, nb_points: int
+    ) -&gt; list[tuple[int, int]]:
+        &#34;&#34;&#34;Extract point coordinates from binary data.
+        
+        Args:
+            binary: Binary string containing point data
+            nb_points: Number of points to extract
+            
+        Returns:
+            list[tuple[int, int]]: List of (x, y) coordinate tuples
+
+        &#34;&#34;&#34;
         points = []
         for i in range(nb_points):
             start = 32 + i * 64
@@ -115,7 +162,16 @@ el.replaceWith(d);
         
         return points
     
-    def are_points_collinear(self, points: List[Tuple[int, int]]) -&gt; bool:
+    def are_points_collinear(self, points: list[tuple[int, int]]) -&gt; bool:
+        &#34;&#34;&#34;Check if all points are collinear.
+        
+        Args:
+            points: List of (x, y) coordinate tuples
+            
+        Returns:
+            bool: True if points are collinear, False otherwise
+
+        &#34;&#34;&#34;
         if len(points) &lt; 3:
             return True
         
@@ -132,7 +188,16 @@ el.replaceWith(d);
         
         return True
     
-    def delaunay_triangulation(self, points: List[Tuple[int, int]]) -&gt; List[List[int]]:
+    def delaunay_triangulation(self, points: list[tuple[int, int]]) -&gt; list[list[int]]:
+        &#34;&#34;&#34;Perform Delaunay triangulation on a set of points.
+        
+        Args:
+            points: List of (x, y) coordinate tuples
+            
+        Returns:
+            list[list[int]]: List of triangles as point index triples
+
+        &#34;&#34;&#34;
         if len(points) &lt; 3:
             return []
         
@@ -142,7 +207,9 @@ el.replaceWith(d);
         super_triangle = self.create_super_triangle(points)
         triangles = [(len(points), len(points) + 1, len(points) + 2)]
         
-        extended_points = points + [super_triangle[0], super_triangle[1], super_triangle[2]]
+        extended_points = (
+            points + [super_triangle[0], super_triangle[1], super_triangle[2]]
+        )
         
         for i, point in enumerate(points):
             bad_triangles = []
@@ -171,7 +238,18 @@ el.replaceWith(d);
         
         return final_triangles
     
-    def create_super_triangle(self, points: List[Tuple[int, int]]) -&gt; List[Tuple[int, int]]:
+    def create_super_triangle(
+        self, points: list[tuple[int, int]]
+    ) -&gt; list[tuple[int, int]]:
+        &#34;&#34;&#34;Create a super triangle that contains all points.
+        
+        Args:
+            points: List of (x, y) coordinate tuples
+            
+        Returns:
+            list[tuple[int, int]]: Three vertices of the super triangle
+
+        &#34;&#34;&#34;
         if not points:
             return []
         
@@ -195,8 +273,21 @@ el.replaceWith(d);
         
         return [p1, p2, p3]
     
-    def point_in_circumcircle(self, point: Tuple[int, int], triangle: Tuple[int, int, int], 
-                              points: List[Tuple[int, int]]) -&gt; bool:
+    def point_in_circumcircle(
+        self, point: tuple[int, int], triangle: tuple[int, int, int],
+        points: list[tuple[int, int]]
+    ) -&gt; bool:
+        &#34;&#34;&#34;Check if a point lies inside the circumcircle of a triangle.
+        
+        Args:
+            point: Test point coordinates
+            triangle: Triangle vertex indices
+            points: List of all point coordinates
+            
+        Returns:
+            bool: True if point is inside circumcircle
+
+        &#34;&#34;&#34;
         try:
             p1 = points[triangle[0]]
             p2 = points[triangle[1]]
@@ -212,8 +303,14 @@ el.replaceWith(d);
         if abs(d) &lt; 1e-10:
             return False
         
-        ux = ((ax**2 + ay**2) * (by - cy) + (bx**2 + by**2) * (cy - ay) + (cx**2 + cy**2) * (ay - by)) / d
-        uy = ((ax**2 + ay**2) * (cx - bx) + (bx**2 + by**2) * (ax - cx) + (cx**2 + cy**2) * (bx - ax)) / d
+        ux = (
+            ((ax**2 + ay**2) * (by - cy) + (bx**2 + by**2) * (cy - ay) +
+             (cx**2 + cy**2) * (ay - by)) / d
+        )
+        uy = (
+            ((ax**2 + ay**2) * (cx - bx) + (bx**2 + by**2) * (ax - cx) +
+             (cx**2 + cy**2) * (bx - ax)) / d
+        )
         
         px, py = point
         dist_sq = (px - ux)**2 + (py - uy)**2
@@ -221,12 +318,18 @@ el.replaceWith(d);
         
         return dist_sq &lt; r_sq - 1e-10 
     
-    def triangle_edges(self, triangle: Tuple[int, int, int]) -&gt; List[Tuple[int, int]]:
-        &#34;&#34;&#34;Get all edges of a triangle&#34;&#34;&#34;
-        return [(triangle[0], triangle[1]), (triangle[1], triangle[2]), (triangle[2], triangle[0])]
+    def triangle_edges(self, triangle: tuple[int, int, int]) -&gt; list[tuple[int, int]]:
+        &#34;&#34;&#34;Get all edges of a triangle.&#34;&#34;&#34;
+        return [
+            (triangle[0], triangle[1]),
+            (triangle[1], triangle[2]),
+            (triangle[2], triangle[0])
+        ]
     
-    def edge_shared_by_triangles(self, edge: Tuple[int, int], triangles: List[Tuple[int, int, int]]) -&gt; bool:
-        &#34;&#34;&#34;Check if edge is shared by multiple triangles in the list&#34;&#34;&#34;
+    def edge_shared_by_triangles(
+        self, edge: tuple[int, int], triangles: list[tuple[int, int, int]]
+    ) -&gt; bool:
+        &#34;&#34;&#34;Check if edge is shared by multiple triangles in the list.&#34;&#34;&#34;
         count = 0
         for triangle in triangles:
             edges = self.triangle_edges(triangle)
@@ -236,18 +339,27 @@ el.replaceWith(d);
                     return True
         return False</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>A class to perform Delaunay triangulation on point sets.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="app.Triangulation.Triangulation.are_points_collinear"><code class="name flex">
-<span>def <span class="ident">are_points_collinear</span></span>(<span>self, points: List[Tuple[int, int]]) ‑> bool</span>
+<span>def <span class="ident">are_points_collinear</span></span>(<span>self, points: list[tuple[int, int]]) ‑> bool</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def are_points_collinear(self, points: List[Tuple[int, int]]) -&gt; bool:
+<pre><code class="python">def are_points_collinear(self, points: list[tuple[int, int]]) -&gt; bool:
+    &#34;&#34;&#34;Check if all points are collinear.
+    
+    Args:
+        points: List of (x, y) coordinate tuples
+        
+    Returns:
+        bool: True if points are collinear, False otherwise
+
+    &#34;&#34;&#34;
     if len(points) &lt; 3:
         return True
     
@@ -264,17 +376,38 @@ el.replaceWith(d);
     
     return True</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Check if all points are collinear.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>points</code></strong></dt>
+<dd>List of (x, y) coordinate tuples</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if points are collinear, False otherwise</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.create_super_triangle"><code class="name flex">
-<span>def <span class="ident">create_super_triangle</span></span>(<span>self, points: List[Tuple[int, int]]) ‑> List[Tuple[int, int]]</span>
+<span>def <span class="ident">create_super_triangle</span></span>(<span>self, points: list[tuple[int, int]]) ‑> list[tuple[int, int]]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_super_triangle(self, points: List[Tuple[int, int]]) -&gt; List[Tuple[int, int]]:
+<pre><code class="python">def create_super_triangle(
+    self, points: list[tuple[int, int]]
+) -&gt; list[tuple[int, int]]:
+    &#34;&#34;&#34;Create a super triangle that contains all points.
+    
+    Args:
+        points: List of (x, y) coordinate tuples
+        
+    Returns:
+        list[tuple[int, int]]: Three vertices of the super triangle
+
+    &#34;&#34;&#34;
     if not points:
         return []
     
@@ -298,17 +431,36 @@ el.replaceWith(d);
     
     return [p1, p2, p3]</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Create a super triangle that contains all points.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>points</code></strong></dt>
+<dd>List of (x, y) coordinate tuples</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list[tuple[int, int]]</code></dt>
+<dd>Three vertices of the super triangle</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.delaunay_triangulation"><code class="name flex">
-<span>def <span class="ident">delaunay_triangulation</span></span>(<span>self, points: List[Tuple[int, int]]) ‑> List[List[int]]</span>
+<span>def <span class="ident">delaunay_triangulation</span></span>(<span>self, points: list[tuple[int, int]]) ‑> list[list[int]]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delaunay_triangulation(self, points: List[Tuple[int, int]]) -&gt; List[List[int]]:
+<pre><code class="python">def delaunay_triangulation(self, points: list[tuple[int, int]]) -&gt; list[list[int]]:
+    &#34;&#34;&#34;Perform Delaunay triangulation on a set of points.
+    
+    Args:
+        points: List of (x, y) coordinate tuples
+        
+    Returns:
+        list[list[int]]: List of triangles as point index triples
+
+    &#34;&#34;&#34;
     if len(points) &lt; 3:
         return []
     
@@ -318,7 +470,9 @@ el.replaceWith(d);
     super_triangle = self.create_super_triangle(points)
     triangles = [(len(points), len(points) + 1, len(points) + 2)]
     
-    extended_points = points + [super_triangle[0], super_triangle[1], super_triangle[2]]
+    extended_points = (
+        points + [super_triangle[0], super_triangle[1], super_triangle[2]]
+    )
     
     for i, point in enumerate(points):
         bad_triangles = []
@@ -347,18 +501,30 @@ el.replaceWith(d);
     
     return final_triangles</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Perform Delaunay triangulation on a set of points.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>points</code></strong></dt>
+<dd>List of (x, y) coordinate tuples</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list[list[int]]</code></dt>
+<dd>List of triangles as point index triples</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.edge_shared_by_triangles"><code class="name flex">
-<span>def <span class="ident">edge_shared_by_triangles</span></span>(<span>self, edge: Tuple[int, int], triangles: List[Tuple[int, int, int]]) ‑> bool</span>
+<span>def <span class="ident">edge_shared_by_triangles</span></span>(<span>self, edge: tuple[int, int], triangles: list[tuple[int, int, int]]) ‑> bool</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def edge_shared_by_triangles(self, edge: Tuple[int, int], triangles: List[Tuple[int, int, int]]) -&gt; bool:
-    &#34;&#34;&#34;Check if edge is shared by multiple triangles in the list&#34;&#34;&#34;
+<pre><code class="python">def edge_shared_by_triangles(
+    self, edge: tuple[int, int], triangles: list[tuple[int, int, int]]
+) -&gt; bool:
+    &#34;&#34;&#34;Check if edge is shared by multiple triangles in the list.&#34;&#34;&#34;
     count = 0
     for triangle in triangles:
         edges = self.triangle_edges(triangle)
@@ -368,17 +534,27 @@ el.replaceWith(d);
                 return True
     return False</code></pre>
 </details>
-<div class="desc"><p>Check if edge is shared by multiple triangles in the list</p></div>
+<div class="desc"><p>Check if edge is shared by multiple triangles in the list.</p></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.encode"><code class="name flex">
-<span>def <span class="ident">encode</span></span>(<span>self, pointSetBinary: str, triangulatedPoints: List[List[int]]) ‑> str</span>
+<span>def <span class="ident">encode</span></span>(<span>self, pointSetBinary: str, triangulatedPoints: list[list[int]]) ‑> str</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def encode(self, pointSetBinary: str, triangulatedPoints: List[List[int]]) -&gt; str:
+<pre><code class="python">def encode(self, pointSetBinary: str, triangulatedPoints: list[list[int]]) -&gt; str:
+    &#34;&#34;&#34;Encode triangulation data into binary format.
+    
+    Args:
+        pointSetBinary: Binary representation of points
+        triangulatedPoints: List of triangle point indices
+        
+    Returns:
+        str: Binary string with triangulation data
+
+    &#34;&#34;&#34;
     if not triangulatedPoints:
         return pointSetBinary
     
@@ -392,17 +568,41 @@ el.replaceWith(d);
     
     return pointSetBinary + nb_triangles_bin + triangles_bin</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Encode triangulation data into binary format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>pointSetBinary</code></strong></dt>
+<dd>Binary representation of points</dd>
+<dt><strong><code>triangulatedPoints</code></strong></dt>
+<dd>List of triangle point indices</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Binary string with triangulation data</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.extract_points_from_binary"><code class="name flex">
-<span>def <span class="ident">extract_points_from_binary</span></span>(<span>self, binary: str, nb_points: int) ‑> List[Tuple[int, int]]</span>
+<span>def <span class="ident">extract_points_from_binary</span></span>(<span>self, binary: str, nb_points: int) ‑> list[tuple[int, int]]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def extract_points_from_binary(self, binary: str, nb_points: int) -&gt; List[Tuple[int, int]]:
+<pre><code class="python">def extract_points_from_binary(
+    self, binary: str, nb_points: int
+) -&gt; list[tuple[int, int]]:
+    &#34;&#34;&#34;Extract point coordinates from binary data.
+    
+    Args:
+        binary: Binary string containing point data
+        nb_points: Number of points to extract
+        
+    Returns:
+        list[tuple[int, int]]: List of (x, y) coordinate tuples
+
+    &#34;&#34;&#34;
     points = []
     for i in range(nb_points):
         start = 32 + i * 64
@@ -415,7 +615,19 @@ el.replaceWith(d);
     
     return points</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Extract point coordinates from binary data.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>binary</code></strong></dt>
+<dd>Binary string containing point data</dd>
+<dt><strong><code>nb_points</code></strong></dt>
+<dd>Number of points to extract</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list[tuple[int, int]]</code></dt>
+<dd>List of (x, y) coordinate tuples</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.getPointsBinary"><code class="name flex">
 <span>def <span class="ident">getPointsBinary</span></span>(<span>self, id: int) ‑> str | None</span>
@@ -425,21 +637,53 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getPointsBinary(self, id: int) -&gt; Optional[str]:
+<pre><code class="python">def getPointsBinary(self, id: int) -&gt; str | None:
+    &#34;&#34;&#34;Get binary representation of a point set by ID.
+    
+    Args:
+        id: ID of the point set
+        
+    Returns:
+        str|None: Binary representation (empty string by default)
+
+    &#34;&#34;&#34;
     return &#39;&#39;</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Get binary representation of a point set by ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>ID of the point set</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str|None</code></dt>
+<dd>Binary representation (empty string by default)</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.point_in_circumcircle"><code class="name flex">
-<span>def <span class="ident">point_in_circumcircle</span></span>(<span>self,<br>point: Tuple[int, int],<br>triangle: Tuple[int, int, int],<br>points: List[Tuple[int, int]]) ‑> bool</span>
+<span>def <span class="ident">point_in_circumcircle</span></span>(<span>self,<br>point: tuple[int, int],<br>triangle: tuple[int, int, int],<br>points: list[tuple[int, int]]) ‑> bool</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def point_in_circumcircle(self, point: Tuple[int, int], triangle: Tuple[int, int, int], 
-                          points: List[Tuple[int, int]]) -&gt; bool:
+<pre><code class="python">def point_in_circumcircle(
+    self, point: tuple[int, int], triangle: tuple[int, int, int],
+    points: list[tuple[int, int]]
+) -&gt; bool:
+    &#34;&#34;&#34;Check if a point lies inside the circumcircle of a triangle.
+    
+    Args:
+        point: Test point coordinates
+        triangle: Triangle vertex indices
+        points: List of all point coordinates
+        
+    Returns:
+        bool: True if point is inside circumcircle
+
+    &#34;&#34;&#34;
     try:
         p1 = points[triangle[0]]
         p2 = points[triangle[1]]
@@ -455,8 +699,14 @@ el.replaceWith(d);
     if abs(d) &lt; 1e-10:
         return False
     
-    ux = ((ax**2 + ay**2) * (by - cy) + (bx**2 + by**2) * (cy - ay) + (cx**2 + cy**2) * (ay - by)) / d
-    uy = ((ax**2 + ay**2) * (cx - bx) + (bx**2 + by**2) * (ax - cx) + (cx**2 + cy**2) * (bx - ax)) / d
+    ux = (
+        ((ax**2 + ay**2) * (by - cy) + (bx**2 + by**2) * (cy - ay) +
+         (cx**2 + cy**2) * (ay - by)) / d
+    )
+    uy = (
+        ((ax**2 + ay**2) * (cx - bx) + (bx**2 + by**2) * (ax - cx) +
+         (cx**2 + cy**2) * (bx - ax)) / d
+    )
     
     px, py = point
     dist_sq = (px - ux)**2 + (py - uy)**2
@@ -464,21 +714,39 @@ el.replaceWith(d);
     
     return dist_sq &lt; r_sq - 1e-10 </code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Check if a point lies inside the circumcircle of a triangle.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>point</code></strong></dt>
+<dd>Test point coordinates</dd>
+<dt><strong><code>triangle</code></strong></dt>
+<dd>Triangle vertex indices</dd>
+<dt><strong><code>points</code></strong></dt>
+<dd>List of all point coordinates</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if point is inside circumcircle</dd>
+</dl></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.triangle_edges"><code class="name flex">
-<span>def <span class="ident">triangle_edges</span></span>(<span>self, triangle: Tuple[int, int, int]) ‑> List[Tuple[int, int]]</span>
+<span>def <span class="ident">triangle_edges</span></span>(<span>self, triangle: tuple[int, int, int]) ‑> list[tuple[int, int]]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def triangle_edges(self, triangle: Tuple[int, int, int]) -&gt; List[Tuple[int, int]]:
-    &#34;&#34;&#34;Get all edges of a triangle&#34;&#34;&#34;
-    return [(triangle[0], triangle[1]), (triangle[1], triangle[2]), (triangle[2], triangle[0])]</code></pre>
+<pre><code class="python">def triangle_edges(self, triangle: tuple[int, int, int]) -&gt; list[tuple[int, int]]:
+    &#34;&#34;&#34;Get all edges of a triangle.&#34;&#34;&#34;
+    return [
+        (triangle[0], triangle[1]),
+        (triangle[1], triangle[2]),
+        (triangle[2], triangle[0])
+    ]</code></pre>
 </details>
-<div class="desc"><p>Get all edges of a triangle</p></div>
+<div class="desc"><p>Get all edges of a triangle.</p></div>
 </dd>
 <dt id="app.Triangulation.Triangulation.triangulation"><code class="name flex">
 <span>def <span class="ident">triangulation</span></span>(<span>self, pointSetID: int) ‑> str | None</span>
@@ -488,7 +756,20 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def triangulation(self, pointSetID: int) -&gt; Optional[str]:
+<pre><code class="python">def triangulation(self, pointSetID: int) -&gt; str | None:
+    &#34;&#34;&#34;Perform triangulation on a point set.
+    
+    Args:
+        pointSetID: ID of the point set to triangulate
+        
+    Returns:
+        str|None: Binary string with triangulation data or None if insufficient
+            points
+        
+    Raises:
+        Exception: If pointset is unknown or binary is corrupted
+
+    &#34;&#34;&#34;
     binary = self.getPointsBinary(pointSetID)
     
     if binary is None:
@@ -518,7 +799,23 @@ el.replaceWith(d);
     
     return self.encode(binary, triangles)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Perform triangulation on a point set.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>pointSetID</code></strong></dt>
+<dd>ID of the point set to triangulate</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str|None</code></dt>
+<dd>Binary string with triangulation data or None if insufficient
+points</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code></dt>
+<dd>If pointset is unknown or binary is corrupted</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>

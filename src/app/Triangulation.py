@@ -1,7 +1,22 @@
-from typing import List, Tuple, Optional
+
+
+"""Triangulation module for Delaunay triangulation of point sets."""
+
 
 class Triangulation:
-    def encode(self, pointSetBinary: str, triangulatedPoints: List[List[int]]) -> str:
+    """A class to perform Delaunay triangulation on point sets."""
+    
+    def encode(self, pointSetBinary: str, triangulatedPoints: list[list[int]]) -> str:
+        """Encode triangulation data into binary format.
+        
+        Args:
+            pointSetBinary: Binary representation of points
+            triangulatedPoints: List of triangle point indices
+            
+        Returns:
+            str: Binary string with triangulation data
+
+        """
         if not triangulatedPoints:
             return pointSetBinary
         
@@ -15,7 +30,20 @@ class Triangulation:
         
         return pointSetBinary + nb_triangles_bin + triangles_bin
     
-    def triangulation(self, pointSetID: int) -> Optional[str]:
+    def triangulation(self, pointSetID: int) -> str | None:
+        """Perform triangulation on a point set.
+        
+        Args:
+            pointSetID: ID of the point set to triangulate
+            
+        Returns:
+            str|None: Binary string with triangulation data or None if insufficient
+                points
+            
+        Raises:
+            Exception: If pointset is unknown or binary is corrupted
+
+        """
         binary = self.getPointsBinary(pointSetID)
         
         if binary is None:
@@ -45,10 +73,31 @@ class Triangulation:
         
         return self.encode(binary, triangles)
     
-    def getPointsBinary(self, id: int) -> Optional[str]:
+    def getPointsBinary(self, id: int) -> str | None:
+        """Get binary representation of a point set by ID.
+        
+        Args:
+            id: ID of the point set
+            
+        Returns:
+            str|None: Binary representation (empty string by default)
+
+        """
         return ''
     
-    def extract_points_from_binary(self, binary: str, nb_points: int) -> List[Tuple[int, int]]:
+    def extract_points_from_binary(
+        self, binary: str, nb_points: int
+    ) -> list[tuple[int, int]]:
+        """Extract point coordinates from binary data.
+        
+        Args:
+            binary: Binary string containing point data
+            nb_points: Number of points to extract
+            
+        Returns:
+            list[tuple[int, int]]: List of (x, y) coordinate tuples
+
+        """
         points = []
         for i in range(nb_points):
             start = 32 + i * 64
@@ -61,7 +110,16 @@ class Triangulation:
         
         return points
     
-    def are_points_collinear(self, points: List[Tuple[int, int]]) -> bool:
+    def are_points_collinear(self, points: list[tuple[int, int]]) -> bool:
+        """Check if all points are collinear.
+        
+        Args:
+            points: List of (x, y) coordinate tuples
+            
+        Returns:
+            bool: True if points are collinear, False otherwise
+
+        """
         if len(points) < 3:
             return True
         
@@ -78,7 +136,16 @@ class Triangulation:
         
         return True
     
-    def delaunay_triangulation(self, points: List[Tuple[int, int]]) -> List[List[int]]:
+    def delaunay_triangulation(self, points: list[tuple[int, int]]) -> list[list[int]]:
+        """Perform Delaunay triangulation on a set of points.
+        
+        Args:
+            points: List of (x, y) coordinate tuples
+            
+        Returns:
+            list[list[int]]: List of triangles as point index triples
+
+        """
         if len(points) < 3:
             return []
         
@@ -88,7 +155,9 @@ class Triangulation:
         super_triangle = self.create_super_triangle(points)
         triangles = [(len(points), len(points) + 1, len(points) + 2)]
         
-        extended_points = points + [super_triangle[0], super_triangle[1], super_triangle[2]]
+        extended_points = (
+            points + [super_triangle[0], super_triangle[1], super_triangle[2]]
+        )
         
         for i, point in enumerate(points):
             bad_triangles = []
@@ -117,7 +186,18 @@ class Triangulation:
         
         return final_triangles
     
-    def create_super_triangle(self, points: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    def create_super_triangle(
+        self, points: list[tuple[int, int]]
+    ) -> list[tuple[int, int]]:
+        """Create a super triangle that contains all points.
+        
+        Args:
+            points: List of (x, y) coordinate tuples
+            
+        Returns:
+            list[tuple[int, int]]: Three vertices of the super triangle
+
+        """
         if not points:
             return []
         
@@ -141,8 +221,21 @@ class Triangulation:
         
         return [p1, p2, p3]
     
-    def point_in_circumcircle(self, point: Tuple[int, int], triangle: Tuple[int, int, int], 
-                              points: List[Tuple[int, int]]) -> bool:
+    def point_in_circumcircle(
+        self, point: tuple[int, int], triangle: tuple[int, int, int],
+        points: list[tuple[int, int]]
+    ) -> bool:
+        """Check if a point lies inside the circumcircle of a triangle.
+        
+        Args:
+            point: Test point coordinates
+            triangle: Triangle vertex indices
+            points: List of all point coordinates
+            
+        Returns:
+            bool: True if point is inside circumcircle
+
+        """
         try:
             p1 = points[triangle[0]]
             p2 = points[triangle[1]]
@@ -158,8 +251,14 @@ class Triangulation:
         if abs(d) < 1e-10:
             return False
         
-        ux = ((ax**2 + ay**2) * (by - cy) + (bx**2 + by**2) * (cy - ay) + (cx**2 + cy**2) * (ay - by)) / d
-        uy = ((ax**2 + ay**2) * (cx - bx) + (bx**2 + by**2) * (ax - cx) + (cx**2 + cy**2) * (bx - ax)) / d
+        ux = (
+            ((ax**2 + ay**2) * (by - cy) + (bx**2 + by**2) * (cy - ay) +
+             (cx**2 + cy**2) * (ay - by)) / d
+        )
+        uy = (
+            ((ax**2 + ay**2) * (cx - bx) + (bx**2 + by**2) * (ax - cx) +
+             (cx**2 + cy**2) * (bx - ax)) / d
+        )
         
         px, py = point
         dist_sq = (px - ux)**2 + (py - uy)**2
@@ -167,12 +266,18 @@ class Triangulation:
         
         return dist_sq < r_sq - 1e-10 
     
-    def triangle_edges(self, triangle: Tuple[int, int, int]) -> List[Tuple[int, int]]:
-        """Get all edges of a triangle"""
-        return [(triangle[0], triangle[1]), (triangle[1], triangle[2]), (triangle[2], triangle[0])]
+    def triangle_edges(self, triangle: tuple[int, int, int]) -> list[tuple[int, int]]:
+        """Get all edges of a triangle."""
+        return [
+            (triangle[0], triangle[1]),
+            (triangle[1], triangle[2]),
+            (triangle[2], triangle[0])
+        ]
     
-    def edge_shared_by_triangles(self, edge: Tuple[int, int], triangles: List[Tuple[int, int, int]]) -> bool:
-        """Check if edge is shared by multiple triangles in the list"""
+    def edge_shared_by_triangles(
+        self, edge: tuple[int, int], triangles: list[tuple[int, int, int]]
+    ) -> bool:
+        """Check if edge is shared by multiple triangles in the list."""
         count = 0
         for triangle in triangles:
             edges = self.triangle_edges(triangle)

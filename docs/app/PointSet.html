@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>app.PointSet API documentation</title>
-<meta name="description" content="">
+<meta name="description" content="PointSet module for encoding and decoding point data.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,6 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>app.PointSet</code></h1>
 </header>
 <section id="section-intro">
+<p>PointSet module for encoding and decoding point data.</p>
 </section>
 <section>
 </section>
@@ -55,9 +56,21 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PointSet:
+    &#34;&#34;&#34;A class to manage point sets with binary encoding and decoding.&#34;&#34;&#34;
+
     binary: str|None = None
 
     def encode(self, nbPoints: int, pointList: list[int]):
+        &#34;&#34;&#34;Encode points into binary format.
+        
+        Args:
+            nbPoints: Number of points to encode
+            pointList: List of coordinates [x1, y1, x2, y2, ...]
+            
+        Returns:
+            str: Error message if encoding fails, None otherwise
+
+        &#34;&#34;&#34;
         if nbPoints * 2 != len(pointList):
             return &#34;Failed to create PointSet : nbPoints != pointList&#34;
         
@@ -67,9 +80,21 @@ el.replaceWith(d);
             self.binary += BitArray(uint=point, length=32).bin
 
     def getBinary(self) -&gt; str|None:
+        &#34;&#34;&#34;Get the binary representation of the point set.
+        
+        Returns:
+            str|None: Binary string or None if not encoded
+
+        &#34;&#34;&#34;
         return self.binary
     
     def decode(self) -&gt; dict:
+        &#34;&#34;&#34;Decode binary data back to point coordinates.
+        
+        Returns:
+            dict: Dictionary with &#39;nbPoints&#39; and &#39;points&#39; keys
+
+        &#34;&#34;&#34;
         if self.binary is None or len(self.binary) &lt; 32:
             return {}
         
@@ -94,6 +119,15 @@ el.replaceWith(d);
         }
     
     def decode_triangulation(self, binary_with_triangulation: str) -&gt; dict:
+        &#34;&#34;&#34;Decode binary data including triangulation information.
+        
+        Args:
+            binary_with_triangulation: Binary string containing points and triangles
+            
+        Returns:
+            dict: Dictionary with points and triangulation data
+
+        &#34;&#34;&#34;
         if len(binary_with_triangulation) &lt; 32:
             return {}
         
@@ -128,14 +162,18 @@ el.replaceWith(d);
         # Extract triangulation data if present
         if len(binary_with_triangulation) &gt; point_data_length:
             # Extract number of triangles (next 32 bits)
-            nb_triangles_bits = binary_with_triangulation[point_data_length:point_data_length+32]
+            nb_triangles_bits = binary_with_triangulation[
+                point_data_length:point_data_length+32
+            ]
             nb_triangles = int(nb_triangles_bits, 2)
             
             # Extract triangle indices
             triangles = []
             triangle_data_start = point_data_length + 32
             for i in range(nb_triangles):
-                triangle_start = triangle_data_start + i * 96  # 3 indices * 32 bits each
+                triangle_start = (
+                    triangle_data_start + i * 96  # 3 indices * 32 bits each
+                )
                 p1_bits = binary_with_triangulation[triangle_start:triangle_start+32]
                 p2_bits = binary_with_triangulation[triangle_start+32:triangle_start+64]
                 p3_bits = binary_with_triangulation[triangle_start+64:triangle_start+96]
@@ -150,7 +188,7 @@ el.replaceWith(d);
         
         return result</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>A class to manage point sets with binary encoding and decoding.</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="app.PointSet.PointSet.binary"><code class="name">var <span class="ident">binary</span> : str | None</code></dt>
@@ -169,6 +207,12 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def decode(self) -&gt; dict:
+    &#34;&#34;&#34;Decode binary data back to point coordinates.
+    
+    Returns:
+        dict: Dictionary with &#39;nbPoints&#39; and &#39;points&#39; keys
+
+    &#34;&#34;&#34;
     if self.binary is None or len(self.binary) &lt; 32:
         return {}
     
@@ -192,7 +236,12 @@ el.replaceWith(d);
         &#39;points&#39;: points
     }</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decode binary data back to point coordinates.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Dictionary with 'nbPoints' and 'points' keys</dd>
+</dl></div>
 </dd>
 <dt id="app.PointSet.PointSet.decode_triangulation"><code class="name flex">
 <span>def <span class="ident">decode_triangulation</span></span>(<span>self, binary_with_triangulation: str) ‑> dict</span>
@@ -203,6 +252,15 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def decode_triangulation(self, binary_with_triangulation: str) -&gt; dict:
+    &#34;&#34;&#34;Decode binary data including triangulation information.
+    
+    Args:
+        binary_with_triangulation: Binary string containing points and triangles
+        
+    Returns:
+        dict: Dictionary with points and triangulation data
+
+    &#34;&#34;&#34;
     if len(binary_with_triangulation) &lt; 32:
         return {}
     
@@ -237,14 +295,18 @@ el.replaceWith(d);
     # Extract triangulation data if present
     if len(binary_with_triangulation) &gt; point_data_length:
         # Extract number of triangles (next 32 bits)
-        nb_triangles_bits = binary_with_triangulation[point_data_length:point_data_length+32]
+        nb_triangles_bits = binary_with_triangulation[
+            point_data_length:point_data_length+32
+        ]
         nb_triangles = int(nb_triangles_bits, 2)
         
         # Extract triangle indices
         triangles = []
         triangle_data_start = point_data_length + 32
         for i in range(nb_triangles):
-            triangle_start = triangle_data_start + i * 96  # 3 indices * 32 bits each
+            triangle_start = (
+                triangle_data_start + i * 96  # 3 indices * 32 bits each
+            )
             p1_bits = binary_with_triangulation[triangle_start:triangle_start+32]
             p2_bits = binary_with_triangulation[triangle_start+32:triangle_start+64]
             p3_bits = binary_with_triangulation[triangle_start+64:triangle_start+96]
@@ -259,7 +321,17 @@ el.replaceWith(d);
     
     return result</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decode binary data including triangulation information.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>binary_with_triangulation</code></strong></dt>
+<dd>Binary string containing points and triangles</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Dictionary with points and triangulation data</dd>
+</dl></div>
 </dd>
 <dt id="app.PointSet.PointSet.encode"><code class="name flex">
 <span>def <span class="ident">encode</span></span>(<span>self, nbPoints: int, pointList: list[int])</span>
@@ -270,6 +342,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def encode(self, nbPoints: int, pointList: list[int]):
+    &#34;&#34;&#34;Encode points into binary format.
+    
+    Args:
+        nbPoints: Number of points to encode
+        pointList: List of coordinates [x1, y1, x2, y2, ...]
+        
+    Returns:
+        str: Error message if encoding fails, None otherwise
+
+    &#34;&#34;&#34;
     if nbPoints * 2 != len(pointList):
         return &#34;Failed to create PointSet : nbPoints != pointList&#34;
     
@@ -278,7 +360,19 @@ el.replaceWith(d);
     for point in pointList:
         self.binary += BitArray(uint=point, length=32).bin</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Encode points into binary format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>nbPoints</code></strong></dt>
+<dd>Number of points to encode</dd>
+<dt><strong><code>pointList</code></strong></dt>
+<dd>List of coordinates [x1, y1, x2, y2, &hellip;]</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Error message if encoding fails, None otherwise</dd>
+</dl></div>
 </dd>
 <dt id="app.PointSet.PointSet.getBinary"><code class="name flex">
 <span>def <span class="ident">getBinary</span></span>(<span>self) ‑> str | None</span>
@@ -289,9 +383,20 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getBinary(self) -&gt; str|None:
+    &#34;&#34;&#34;Get the binary representation of the point set.
+    
+    Returns:
+        str|None: Binary string or None if not encoded
+
+    &#34;&#34;&#34;
     return self.binary</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Get the binary representation of the point set.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str|None</code></dt>
+<dd>Binary string or None if not encoded</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>

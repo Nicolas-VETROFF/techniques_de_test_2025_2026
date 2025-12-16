@@ -1,5 +1,8 @@
-from flask import Flask, abort, jsonify, render_template, request
+"""Flask application for point set triangulation API."""
+
 import json
+
+from flask import Flask, jsonify, render_template, request
 
 from app.PointSet import PointSet
 from app.PointSetManager import PointSetManager
@@ -9,12 +12,26 @@ app = Flask(__name__)
 
 manager = PointSetManager()
 
+
 @app.route('/')
 def hello():
+    """Serve the homepage.
+    
+    Returns:
+        str: Rendered HTML template
+
+    """
     return render_template('index.html')
+
 
 @app.route('/api/manager/add', methods=['POST'])
 def add_pointset_to_manager():
+    """Add a new point set to the manager.
+    
+    Returns:
+        Response: JSON with success message or error
+
+    """
     data = request.get_json()
     nbPoints = int(data.get('nb')) if data.get('nb') is not None else None
     listString = data.get('list')
@@ -51,7 +68,16 @@ def add_pointset_to_manager():
     })
 
 @app.route('/api/manager/get/<id>')
-def get_pointset_from_manager(id: int):    
+def get_pointset_from_manager(id: int):
+    """Get a point set by ID.
+    
+    Args:
+        id: Point set identifier
+        
+    Returns:
+        Response: JSON with point set data or error message
+
+    """    
     try:
         pointSet = manager.get_pointset(int(id))
         if pointSet is None:
@@ -72,7 +98,16 @@ def get_pointset_from_manager(id: int):
         })
 
 @app.route('/api/manager/readable/<id>')
-def get_pointset_readable(id: int):    
+def get_pointset_readable(id: int):
+    """Get a point set in readable format by ID.
+    
+    Args:
+        id: Point set identifier
+        
+    Returns:
+        Response: JSON with readable point set data or error message
+
+    """    
     try:
         binary = manager.get(int(id))
         if binary is None:
@@ -94,7 +129,16 @@ def get_pointset_readable(id: int):
         })
 
 @app.route('/api/triangulate/<id>')
-def get_triangulation(id: int):    
+def get_triangulation(id: int):
+    """Perform triangulation on a point set.
+    
+    Args:
+        id: Point set identifier
+        
+    Returns:
+        Response: JSON with triangulation result or error message
+
+    """    
     triang = Triangulation()
     triang.getPointsBinary = lambda point_id: manager.get(int(point_id))
     
@@ -121,4 +165,4 @@ def get_triangulation(id: int):
         })
 
 if __name__ == "__main__":
-    app.debug
+    app.run(debug=True)

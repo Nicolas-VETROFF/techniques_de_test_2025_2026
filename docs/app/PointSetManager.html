@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>app.PointSetManager API documentation</title>
-<meta name="description" content="">
+<meta name="description" content="PointSetManager module for managing collections of PointSet objects.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,6 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>app.PointSetManager</code></h1>
 </header>
 <section id="section-intro">
+<p>PointSetManager module for managing collections of PointSet objects.</p>
 </section>
 <section>
 </section>
@@ -55,29 +56,66 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PointSetManager:
+    &#34;&#34;&#34;A class to manage storage and retrieval of PointSet objects.&#34;&#34;&#34;
+
     storage: list[PointSet]
 
     def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize the PointSetManager with empty storage.&#34;&#34;&#34;
         self.storage = list[PointSet]()
 
     def add(self, pointSet: PointSet) -&gt; int:
+        &#34;&#34;&#34;Add a PointSet to storage.
+        
+        Args:
+            pointSet: The PointSet object to add
+            
+        Returns:
+            int: The ID assigned to the stored PointSet
+
+        &#34;&#34;&#34;
         self.storage.append(pointSet)
 
         return len(self.storage) - 1
     
     def get(self, id: int) -&gt; str|None:
+        &#34;&#34;&#34;Get the binary representation of a stored PointSet.
+        
+        Args:
+            id: The ID of the PointSet to retrieve
+            
+        Returns:
+            str|None: Binary representation of the PointSet
+            
+        Raises:
+            KeyError: If the ID is invalid
+
+        &#34;&#34;&#34;
         if (id &lt; 0 or id &gt; len(self.storage) - 1):
             raise KeyError()
 
         return self.storage[id].getBinary()
     
     def get_pointset(self, id: int) -&gt; PointSet|None:
+        &#34;&#34;&#34;Get a stored PointSet object.
+        
+        Args:
+            id: The ID of the PointSet to retrieve
+            
+        Returns:
+            PointSet|None: The PointSet object
+            
+        Raises:
+            KeyError: If the ID is invalid
+
+        &#34;&#34;&#34;
         if (id &lt; 0 or id &gt; len(self.storage) - 1):
             raise KeyError()
 
         return self.storage[id]</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>A class to manage storage and retrieval of PointSet objects.</p>
+<p>Initialize the PointSetManager with empty storage.</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="app.PointSetManager.PointSetManager.storage"><code class="name">var <span class="ident">storage</span> : list[<a title="app.PointSet.PointSet" href="PointSet.html#app.PointSet.PointSet">PointSet</a>]</code></dt>
@@ -96,11 +134,30 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add(self, pointSet: PointSet) -&gt; int:
+    &#34;&#34;&#34;Add a PointSet to storage.
+    
+    Args:
+        pointSet: The PointSet object to add
+        
+    Returns:
+        int: The ID assigned to the stored PointSet
+
+    &#34;&#34;&#34;
     self.storage.append(pointSet)
 
     return len(self.storage) - 1</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Add a PointSet to storage.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>pointSet</code></strong></dt>
+<dd>The PointSet object to add</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>The ID assigned to the stored PointSet</dd>
+</dl></div>
 </dd>
 <dt id="app.PointSetManager.PointSetManager.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, id: int) ‑> str | None</span>
@@ -111,12 +168,39 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get(self, id: int) -&gt; str|None:
+    &#34;&#34;&#34;Get the binary representation of a stored PointSet.
+    
+    Args:
+        id: The ID of the PointSet to retrieve
+        
+    Returns:
+        str|None: Binary representation of the PointSet
+        
+    Raises:
+        KeyError: If the ID is invalid
+
+    &#34;&#34;&#34;
     if (id &lt; 0 or id &gt; len(self.storage) - 1):
         raise KeyError()
 
     return self.storage[id].getBinary()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Get the binary representation of a stored PointSet.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The ID of the PointSet to retrieve</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str|None</code></dt>
+<dd>Binary representation of the PointSet</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code></dt>
+<dd>If the ID is invalid</dd>
+</dl></div>
 </dd>
 <dt id="app.PointSetManager.PointSetManager.get_pointset"><code class="name flex">
 <span>def <span class="ident">get_pointset</span></span>(<span>self, id: int) ‑> <a title="app.PointSet.PointSet" href="PointSet.html#app.PointSet.PointSet">PointSet</a> | None</span>
@@ -127,12 +211,39 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_pointset(self, id: int) -&gt; PointSet|None:
+    &#34;&#34;&#34;Get a stored PointSet object.
+    
+    Args:
+        id: The ID of the PointSet to retrieve
+        
+    Returns:
+        PointSet|None: The PointSet object
+        
+    Raises:
+        KeyError: If the ID is invalid
+
+    &#34;&#34;&#34;
     if (id &lt; 0 or id &gt; len(self.storage) - 1):
         raise KeyError()
 
     return self.storage[id]</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Get a stored PointSet object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The ID of the PointSet to retrieve</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>PointSet|None</code></dt>
+<dd>The PointSet object</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code></dt>
+<dd>If the ID is invalid</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>

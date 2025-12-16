@@ -1,12 +1,20 @@
-import time
+"""Test module for performance testing of triangulation functionality."""
+
 import random
+import time
 from unittest.mock import MagicMock
-from app.Triangulation import Triangulation
+
 from app.PointSet import PointSet
+from app.Triangulation import Triangulation
+
+"""Performance test cases for triangulation functionality."""
+
 
 class TestPerformance:
+    """Performance test cases for triangulation functionality."""
     
     def test_large_triangulation_performance(self):
+        """Test performance of large triangulation (10k points)."""
         nb_points = 10000
         points = []
         
@@ -56,6 +64,7 @@ class TestPerformance:
             assert nb_triangles >= expected_min_triangles
     
     def test_medium_triangulation_performance(self):
+        """Test performance of medium triangulation (1k points)."""
         nb_points = 1000
         points = []
         
@@ -84,17 +93,20 @@ class TestPerformance:
         
         print(f"Triangulation of {nb_points} points took {duration:.4f} seconds")
         
-        assert duration < 3.0, f"Medium triangulation took too long: {duration:.4f} seconds"
+        assert duration < 3.0, (
+            f"Medium triangulation took too long: {duration:.4f} seconds"
+        )
         
         assert result is not None
         assert result.startswith(binary)
     
     def test_small_triangulation_performance(self):
+        """Test performance of small triangulation (100 points)."""
         nb_points = 100
         points = []
         
         random.seed(42)  # For reproducible results
-        for i in range(nb_points):
+        for _i in range(nb_points):
             x = random.randint(0, 1000)
             y = random.randint(0, 1000)
             points.extend([x, y])
@@ -114,12 +126,15 @@ class TestPerformance:
         
         print(f"Triangulation of {nb_points} points took {duration:.4f} seconds")
         
-        assert duration < 0.5, f"Small triangulation took too long: {duration:.4f} seconds"
+        assert duration < 0.5, (
+            f"Small triangulation took too long: {duration:.4f} seconds"
+        )
         
         assert result is not None
         assert result.startswith(binary)
     
     def test_performance_comparison(self):
+        """Test performance comparison across different point set sizes."""
         test_sizes = [10, 50, 100, 500, 1000]
         results = []
         

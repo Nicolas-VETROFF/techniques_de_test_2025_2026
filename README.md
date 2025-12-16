@@ -22,3 +22,13 @@ Pour utiliser l'application :
 Pour lancer les tests :
 - Se mettre à la racine du projet
 - `pytest -v`
+
+Pour voir la couverture des tests :
+- Se mettre à la racine du projet
+- `coverage run -m pytest`
+- `coverage report`
+- `coverage html`
+
+Générer la documentation :
+- Se mettre à la racine du projet
+- `pdoc3 --html --force --output docs src/app`

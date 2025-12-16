@@ -108,7 +108,7 @@ el.replaceWith(d);
         nb_points = int(nb_points_bits, 2)
         
         expected_length = 32 + nb_points * 64
-        if len(binary) &lt; expected_length:
+        if len(binary) % 32 != 0:
             raise Exception(&#34;Corrupted binary&#34;)
         elif len(binary) != expected_length:
             raise Exception(&#34;Wrong number of points&#34;)
@@ -782,7 +782,7 @@ el.replaceWith(d);
     nb_points = int(nb_points_bits, 2)
     
     expected_length = 32 + nb_points * 64
-    if len(binary) &lt; expected_length:
+    if len(binary) % 32 != 0:
         raise Exception(&#34;Corrupted binary&#34;)
     elif len(binary) != expected_length:
         raise Exception(&#34;Wrong number of points&#34;)

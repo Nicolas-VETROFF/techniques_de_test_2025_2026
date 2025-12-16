@@ -73,18 +73,6 @@ class Triangulation:
         
         return self.encode(binary, triangles)
     
-    def getPointsBinary(self, id: int) -> str | None:
-        """Get binary representation of a point set by ID.
-        
-        Args:
-            id: ID of the point set
-            
-        Returns:
-            str|None: Binary representation (empty string by default)
-
-        """
-        return ''
-    
     def extract_points_from_binary(
         self, binary: str, nb_points: int
     ) -> list[tuple[int, int]]:

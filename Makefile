@@ -20,7 +20,7 @@ doc:
 	@PYTHON_PATH=$(PYTHON_PATH) pdoc3 --html --force --output docs src/app
 
 web:
-	export FLASK_APP=$(PYTHON_PATH)/app/app.py
+	echo "export FLASK_APP=$(PYTHON_PATH)/app/app.py"
 	@PYTHON_PATH=$(PYTHON_PATH) flask run
 
 ruff:

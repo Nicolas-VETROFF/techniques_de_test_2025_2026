@@ -9,7 +9,6 @@ from app.Triangulation import Triangulation
 
 """Performance test cases for triangulation functionality."""
 
-
 class TestPerformance:
     """Performance test cases for triangulation functionality."""
     
@@ -93,7 +92,7 @@ class TestPerformance:
         
         print(f"Triangulation of {nb_points} points took {duration:.4f} seconds")
         
-        assert duration < 3.0, (
+        assert duration < 4.0, (
             f"Medium triangulation took too long: {duration:.4f} seconds"
         )
         

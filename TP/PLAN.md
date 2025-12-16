@@ -72,7 +72,7 @@ INFO : Ces tests sont lancer à part, à cause du temps qu'ils peuvent prendre.
 - [x] Rapidité du système à générer le binaire de Triangulator
 
 ## Tests de qualité et documentation
-- [ ] Vérification de la qualité du code
+- [x] Vérification de la qualité du code
   - Couverture de tests
   - ...
-- [ ] Documentation complète
+- [x] Documentation complète

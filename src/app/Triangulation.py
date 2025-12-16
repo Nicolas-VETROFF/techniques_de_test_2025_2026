@@ -56,7 +56,7 @@ class Triangulation:
         nb_points = int(nb_points_bits, 2)
         
         expected_length = 32 + nb_points * 64
-        if len(binary) < expected_length:
+        if len(binary) % 32 != 0:
             raise Exception("Corrupted binary")
         elif len(binary) != expected_length:
             raise Exception("Wrong number of points")
